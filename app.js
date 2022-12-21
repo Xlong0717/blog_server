@@ -19,6 +19,6 @@ const userRouter = require('./router/article')
 app.use('/api', userRouter)
 
 // 启动服务器
-app.listen(3007,()=>{
-  console.log('api server running at http://127.0.0.1:3007')
+app.listen(3000,()=>{
+  console.log('api server running at http://127.0.0.1:3000')
 })
