@@ -171,11 +171,84 @@ router.post('/artTypes',((req,res)=>{
           data: dataRes
         })
       }
-
     }))
 
   })
 }))
+
+// 查询浏览次数
+router.post('/picturecounter',((req,res)=>{
+  // 查询浏览次数
+  const sql = `select * from picture_date`;
+  // 已经查询的次数
+
+
+  db.query(sql, ((err, resual) => {
+    if (err) {
+      return res.send({
+        status: 1,
+        message: err.message
+      })
+    } else {
+      let num = resual[0].num_counter + 1 ;
+        const sql1 = `UPDATE  picture_date  SET
+        num_counter=${num}  where id =1
+        `
+        db.query(sql1,((Err,Res)=>{
+          if (Err) {
+            return res.send({
+              status: 1,
+              message: Err.message
+            })
+          }{
+            db.query(sql,((Err1,Res1)=>{
+              if (Err1) {
+                return res.send({
+                  status: 1,
+                  message: err.message
+                })
+              }else{
+                  console.log( Res1[0],'Res1Res1Res1Res1Res1');
+                  let objs = {
+                    num_counter:  Res1[0].num_counter,
+                    start_time:Res1[0].start_time,
+                    end_time:Res1[0].end_time,
+                  } ;
+                  console.log(objs,'objs')
+                  return res.send({
+                    msg:'ok',
+                    data:objs
+                  })
+              }
+
+            }))
+          }
+        }))
+    }
+  }))
+}))
+
+// 查询所有相册
+router.post('/imgsList',((req, res)=>{
+  const sql = `select * from picture`
+  db.query(sql, ((err, resual) => {
+    if (err) {
+      return res.send({
+        status: 1,
+        message: err.message
+      })
+    } else {
+      console.log(resual,'resualllllllll')
+      return res.send({
+        code: 200,
+        status: 1,
+        msg: "成功",
+        data: resual
+      })
+    }
+  }))
+}))
+
 
 
 
