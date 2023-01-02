@@ -7,22 +7,42 @@ const router = express.Router();
 const db = require('../db/index');
 router.post('/articleList', (req, res) => {
 
-  const sql = `select * from article`
-  db.query(sql, ((err, resual) => {
-    if (err) {
-      return res.send({
-        status: 1,
-        message: err.message
-      })
-    } else {
-      return res.send({
-        code: 200,
-        status: 1,
-        msg: "成功",
-        data: resual
-      })
-    }
-  }))
+  let postData = '' // 存放客户端传来的数据
+  req.on('data', chunk => {
+    console.log('chunk', chunk) // 二进制格式
+    postData += chunk.toString() // 将二进制格式转成字符串格式，拼接到 postData 上
+  })
+  console.log(postData, 'postData')
+  //接受前端数据
+  let obj = '';
+  req.on('end', () => {
+    // 将字符串转对象
+    obj = JSON.parse(postData);
+    console.log(obj,'objjj')
+    let  sql = `select * from article`
+    console.log(obj.like,'obj.likeobj.likeobj.likeobj.likeobj.like')
+      if(obj.like){
+          sql = `select * from article   WHERE detail  like '%${obj.like}%'`
+      }
+    db.query(sql, ((err, resual) => {
+      if (err) {
+        return res.send({
+          status: 1,
+          message: err.message
+        })
+      } else {
+        return res.send({
+          code: 200,
+          status: 1,
+          msg: "成功",
+          data: resual
+        })
+      }
+    }))
+    
+  })
+
+
 })
 
 // 查文章详情
