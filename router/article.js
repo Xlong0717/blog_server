@@ -19,10 +19,9 @@ router.post('/articleList', (req, res) => {
     // 将字符串转对象
     obj = JSON.parse(postData);
     console.log(obj,'objjj')
-    let  sql = `select * from article`
-    console.log(obj.like,'obj.likeobj.likeobj.likeobj.likeobj.like')
+    let  sql = `select * from article ORDER BY start_time DESC`
       if(obj.like){
-          sql = `select * from article   WHERE detail  like '%${obj.like}%'`
+          sql = `select * from article   WHERE title  like '%${obj.like}%'`
       }
     db.query(sql, ((err, resual) => {
       if (err) {
