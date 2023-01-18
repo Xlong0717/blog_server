@@ -270,22 +270,40 @@ router.post('/imgsList',((req, res)=>{
 
 // 查询所有歌曲
 router.post('/videoList',((req, res)=>{
-  const sql = `select * from mp3_video`
-  db.query(sql, ((err, resual) => {
-    if (err) {
-      return res.send({
-        status: 1,
-        message: err.message
-      })
-    } else {
-      return res.send({
-        code: 200,
-        status: 1,
-        msg: "成功",
-        data: resual
-      })
+  
+  let postData = '';
+
+  req.on('data',chunk=>{
+    postData += chunk.toString()
+  })
+
+  let obj = '';
+
+  req.on('end',()=>{
+    obj = JSON.parse(postData);
+    let sql = `select * from mp3_video`;
+    if(obj.like){
+      sql = `select * from mp3_video WHERE img_text like '%${obj.like}%' `
     }
-  }))
+    db.query(sql, ((err, resual) => {
+      if (err) {
+        return res.send({
+          status: 1,
+          message: err.message
+        })
+      } else {
+        return res.send({
+          code: 200,
+          status: 1,
+          msg: "成功",
+          data: resual
+        })
+      }
+    }))
+  })
+
+
+ 
 }))
 
 
